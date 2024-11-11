@@ -9,4 +9,5 @@ public interface ProfessorService {
     Optional<Professor> getProfessorById(int id);
     Professor saveProfessor(Professor professor);
     void deleteProfessor(int id);
+    List<Professor> searchProfessors(String keyword);
 }

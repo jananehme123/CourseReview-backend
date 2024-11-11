@@ -45,5 +45,14 @@ public class DepartmentController {
     public void deleteDepartment(@PathVariable int id) {  // Changed Long to int
         departmentService.deleteDepartment(id);
     }
+
+    public DepartmentController(DepartmentService departmentService) {
+        this.departmentService = departmentService;
+    }
+
+    @GetMapping("/search")
+    public List<Department> searchDepartments(@RequestParam String keyword) {
+        return departmentService.searchDepartments(keyword);
+    }
 }
 

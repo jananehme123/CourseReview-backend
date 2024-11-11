@@ -9,4 +9,5 @@ public interface CourseService {
     Optional<Course> getCourseById(int id);
     Course saveCourse(Course course);
     void deleteCourse(int id);
+    List<Course> searchCourses(String keyword);
 }

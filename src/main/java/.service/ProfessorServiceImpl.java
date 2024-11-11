@@ -47,4 +47,13 @@ public class ProfessorServiceImpl implements ProfessorService {
     public void deleteProfessor(int id) {
         professorRepository.deleteById(id);
     }
+
+    public ProfessorServiceImpl(ProfessorRepository professorRepository) {
+        this.professorRepository = professorRepository;
+    }
+
+    @Override
+    public List<Professor> searchProfessors(String keyword) {
+        return professorRepository.searchProfessors(keyword);
+    }
 }

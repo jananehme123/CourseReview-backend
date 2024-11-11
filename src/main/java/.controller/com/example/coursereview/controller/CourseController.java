@@ -40,4 +40,13 @@ public class CourseController {
     public void deleteCourse(@PathVariable int id) {
         courseService.deleteCourse(id);
     }
+
+    public CourseController(CourseService courseService) {
+        this.courseService = courseService;
+    }
+
+    @GetMapping("/search")
+    public List<Course> searchCourses(@RequestParam String keyword) {
+        return courseService.searchCourses(keyword);
+    }
 }

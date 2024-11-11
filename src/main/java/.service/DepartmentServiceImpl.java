@@ -29,4 +29,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     public void deleteDepartment(int id) {  // Changed Long to int
         departmentRepository.deleteById(id);
     }
+
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
+        this.departmentRepository = departmentRepository;
+    }
+
+    @Override
+    public List<Department> searchDepartments(String keyword) {
+        return departmentRepository.searchDepartments(keyword);
+    }
 }

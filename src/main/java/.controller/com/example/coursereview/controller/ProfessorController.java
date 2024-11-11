@@ -40,4 +40,13 @@ public class ProfessorController {
     public void deleteProfessor(@PathVariable int id) {
         professorService.deleteProfessor(id);
     }
+
+    public ProfessorController(ProfessorService professorService) {
+        this.professorService = professorService;
+    }
+
+    @GetMapping("/search")
+    public List<Professor> searchProfessors(@RequestParam String keyword) {
+        return professorService.searchProfessors(keyword);
+    }
 }

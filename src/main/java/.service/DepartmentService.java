@@ -10,4 +10,5 @@ public interface DepartmentService {
     Optional<Department> getDepartmentById(int id);  // Changed Long to int
     Department saveDepartment(Department department);
     void deleteDepartment(int id);  // Changed Long to int
+    List<Department> searchDepartments(String keyword);
 }
