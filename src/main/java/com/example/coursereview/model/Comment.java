@@ -20,8 +20,16 @@ public class Comment {
    private int id;
    private String text;
    private String anonymousId;
-   // @ManyToOne
-   //private User user;  //relationship with user entity
+   
+   // Many-to-One relationship with User
+   @ManyToOne
+   @JoinColumn(name = "user_id", nullable = false) // foreign key 
+   private User user;
+
+   // Many-to-One relationship with Professor
+   @ManyToOne
+   @JoinColumn(name = "professor_id", nullable = false) // foreign key 
+   private Professor professor;
 
    public Comment() {
    }
@@ -62,4 +70,5 @@ public class Comment {
    //public String getUsername() {
    //return user != null ? user.getUsername() : null;
    //}
+   
 }
