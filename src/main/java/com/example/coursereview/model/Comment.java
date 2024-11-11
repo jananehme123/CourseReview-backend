@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-//import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 @Table(
@@ -70,5 +70,5 @@ public class Comment {
    //public String getUsername() {
    //return user != null ? user.getUsername() : null;
    //}
-   
+
 }
