@@ -1,12 +1,11 @@
 package com.example.coursereview.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.OneToMany;
-import org.springframework.data.annotation.Id;
+import jakarta.persistence.*;
 
 import java.util.List;
+
+import com.example.coursereview.model.Professor;
+import com.example.coursereview.model.Course;
 
 @Entity
 public class Department {

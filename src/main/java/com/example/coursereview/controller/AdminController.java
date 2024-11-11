@@ -16,8 +16,8 @@ public class AdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/make-admin/{id}")
-    public ResponseEntity<String> makeUserAdmin(@PathVariable Long id) {
-        User user = userRepository.findById(Math.toIntExact(id)).orElseThrow(() -> new RuntimeException("User not found"));
+    public ResponseEntity<String> makeUserAdmin(@PathVariable String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
         user.setRole(Role.ADMIN);
         userRepository.save(user);
         return ResponseEntity.ok("User promoted to admin");
