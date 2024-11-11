@@ -32,9 +32,6 @@ public class EmailServiceImpl implements EmailService {
             String subject = "Email Verification";
             String body = "Click to verify: " + verificationUrl;
 
-            System.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
-            System.setProperty("mail.debug.auth", "true");
-
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
             helper.setTo(email);

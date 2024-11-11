@@ -5,7 +5,6 @@ import com.example.coursereview.repository.UserRepository;
 import com.example.coursereview.service.EmailServiceImpl;
 import com.example.coursereview.utils.JwtUtil;
 import com.example.coursereview.utils.PasswordUtil;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class AuthController {
 

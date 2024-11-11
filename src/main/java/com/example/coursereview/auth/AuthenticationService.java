@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import com.example.coursereview.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.properties.bind.validation.ValidationErrors;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -54,6 +53,9 @@ public class AuthenticationService {
 //        }
         return AuthenticationResponse.builder()
                 .token(jwt)
+                .id(user.getId())
+                .email(user.getEmail())
+                .role(user.getRole().name())
                 .build();
     }
 
@@ -70,14 +72,22 @@ public class AuthenticationService {
             throw e;
         }
         var user = repository.findByEmail(request.getEmail()).orElseThrow();
-//        if (!user.isVerified()) {
-//            throw new RuntimeException("User account is not verified");
-//        }
         var jwt = jwtUtil.generateToken(user);
         revokeAllUserTokens(user);
         SaveUserToken(user, jwt);
+//        if (!user.isVerified()) {
+//            try {
+//                emailService.sendVerificationEmail(user.getEmail(), jwt);
+//            } catch (Exception e) {
+//                LOGGER.error("Failed to send verification email, but user was registered: " + e.getMessage());
+//            }
+//            throw new RuntimeException("User account is not verified");
+//        }
         return AuthenticationResponse.builder()
                 .token(jwt)
+                .id(user.getId())
+                .email(user.getEmail())
+                .role(user.getRole().name())
                 .build();
     }
 
