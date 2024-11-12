@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Integer> {
-    @Query("SELECT c FROM Course c WHERE c.name LIKE %:keyword% OR c.professor.name LIKE %:keyword% OR c.department.name LIKE %:keyword%")
+    @Query("SELECT c FROM Course c WHERE c.name LIKE %:keyword% OR c.professor.firstName LIKE %:keyword% OR c.professor.lastName LIKE %:keyword% OR c.department.name LIKE %:keyword%")
     List<Course> searchCourses(@Param("keyword") String keyword);
 }
 

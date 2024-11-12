@@ -40,10 +40,6 @@ public class CourseServiceImpl implements CourseService {
         courseRepository.deleteById(id);
     }
 
-    public CourseServiceImpl(CourseRepository courseRepository) {
-        this.courseRepository = courseRepository;
-    }
-
     @Override
     public List<Course> searchCourses(String keyword) {
         return courseRepository.searchCourses(keyword);

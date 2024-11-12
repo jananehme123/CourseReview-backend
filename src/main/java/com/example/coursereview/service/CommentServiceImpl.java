@@ -3,10 +3,14 @@ package com.example.coursereview.service;
 import com.example.coursereview.model.Comment;
 import com.example.coursereview.repository.CommentRepository;
 import com.example.coursereview.utils.ProhibitedWordsFilter;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
 
+
+@Service
 public class CommentServiceImpl implements CommentService{
 
     private final CommentRepository commentRepository;
