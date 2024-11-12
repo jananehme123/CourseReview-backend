@@ -1,6 +1,8 @@
 package com.example.coursereview.service;
 
 import com.example.coursereview.model.Professor;
+import com.example.coursereview.model.ProfessorRating;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -9,4 +11,9 @@ public interface ProfessorService {
     Optional<Professor> getProfessorById(int id);
     Professor saveProfessor(Professor professor);
     void deleteProfessor(int id);
+    List<Professor> searchProfessors(String keyword);
+
+    void addRating(ProfessorRating rating);
+    double calculateAverageRating(int professorId);
 }
+

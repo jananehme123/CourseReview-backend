@@ -1,8 +1,10 @@
 package com.example.coursereview.controller;
 
 import com.example.coursereview.model.Professor;
+import com.example.coursereview.model.ProfessorRating;
 import com.example.coursereview.service.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,4 +42,29 @@ public class ProfessorController {
     public void deleteProfessor(@PathVariable int id) {
         professorService.deleteProfessor(id);
     }
+
+    public ProfessorController(ProfessorService professorService) {
+        this.professorService = professorService;
+    }
+
+    @GetMapping("/search")
+    public List<Professor> searchProfessors(@RequestParam String keyword) {
+        return professorService.searchProfessors(keyword);
+    }
+
+@PostMapping("/rateProfessor")
+public ResponseEntity<String> rateProfessor(@RequestParam int professorId, @RequestParam int rating, @RequestParam String review) {
+    ProfessorRating professorRating = new ProfessorRating(0, professorId, rating, review);
+    professorService.addRating(professorRating);
+    return ResponseEntity.ok("Rating submitted successfully.");
+}
+
+
+
+
+
+
+
+
+    
 }

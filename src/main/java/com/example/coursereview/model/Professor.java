@@ -1,9 +1,11 @@
 package com.example.coursereview.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
 
 import java.util.List;
+
+import com.example.coursereview.model.Department;
+import com.example.coursereview.model.Course;
 
 @Entity
 public class Professor {
@@ -16,7 +18,6 @@ public class Professor {
     private String lastName;
     private String email;
     private String title;
-
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;

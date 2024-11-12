@@ -1,4 +1,5 @@
 com\example\coursereview\model\Department.class
+com\example\coursereview\service\DepartmentServiceImpl.class
 com\example\coursereview\service\ProfessorService.class
 com\example\coursereview\service\DepartmentService.class
 com\example\coursereview\repository\UserRepository.class
@@ -9,11 +10,11 @@ com\example\coursereview\model\Course.class
 com\example\coursereview\controller\CourseController.class
 com\example\coursereview\controller\DepartmentController.class
 com\example\coursereview\model\Professor.class
+com\example\CourseReviewApplication.class
 com\example\coursereview\service\ProfessorServiceImpl.class
 com\example\coursereview\service\CourseServiceImpl.class
 com\example\coursereview\repository\ProfessorRepository.class
 com\example\coursereview\service\CourseService.class
-AdminController.class
-DepartmentServiceImpl.class
 com\example\coursereview\model\User.class
 com\example\coursereview\repository\CourseRepository.class
+com\example\coursereview\controller\AdminController.class

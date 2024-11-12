@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import com.example.coursereview.model.Department;
+import com.example.coursereview.model.Professor;
+
 @Entity
 @Table(name = "Course")
 public class Course {
@@ -17,6 +20,13 @@ public class Course {
     private String name;
     private String description;
     private int credits;
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    @ManyToOne
+    @JoinColumn(name = "professor_id")
+    private Professor professor;
 
     // Getters and Setters
     public int getId() {

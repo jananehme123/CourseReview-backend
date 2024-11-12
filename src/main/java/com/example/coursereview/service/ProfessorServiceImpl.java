@@ -1,10 +1,12 @@
 package com.example.coursereview.service;
 
 import com.example.coursereview.model.Professor;
+import com.example.coursereview.model.ProfessorRating;
 import com.example.coursereview.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,5 +34,35 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     public void deleteProfessor(int id) {
         professorRepository.deleteById(id);
+    }
+
+    public ProfessorServiceImpl(ProfessorRepository professorRepository) {
+        this.professorRepository = professorRepository;
+    }
+
+    @Override
+    public List<Professor> searchProfessors(String keyword) {
+        return professorRepository.searchProfessors(keyword);
+    }
+
+
+   private List<ProfessorRating> ratings = new ArrayList<>();
+
+
+    // Rating Methods
+    public void addRating(ProfessorRating rating) {
+        ratings.add(rating);
+    }
+
+    public double calculateAverageRating(int professorId) {
+        int sum = 0;
+        int count = 0;
+        for (ProfessorRating rating : ratings) {
+            if (rating.getProfessorId() == professorId) {
+                sum += rating.getRating();
+                count++;
+            }
+        }
+        return count == 0 ? 0 : (double) sum / count;
     }
 }
