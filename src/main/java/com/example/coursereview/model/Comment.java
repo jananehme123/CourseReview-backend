@@ -1,12 +1,6 @@
-// Source code is decompiled from a .class file using FernFlower decompiler.
 package com.example.coursereview.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 @Entity
 @Table(
@@ -19,11 +13,10 @@ public class Comment {
    )
    private int id;
    private String text;
-   private String anonymousId;
-   
+
    // Many-to-One relationship with User
    @ManyToOne
-   @JoinColumn(name = "user_id", nullable = false) // foreign key 
+   @JoinColumn(name = "user_id", nullable = false) // foreign key
    private User user;
 
    // Many-to-One relationship with Professor
@@ -49,26 +42,5 @@ public class Comment {
    public void setText(String text) {
       this.text = text;
    }
-
-   public String getAnonymousId() {
-    return anonymousId;
-    }
-
-    public void setAnonymousId(String anonymousId) {
-     this.anonymousId = anonymousId;
-    }
-
-//    public User getUser(){
-//     return user;
-//    }
-
-//    public void setUser(User user){
-//     this.user=user;
-//    }
-
-   //if we want the user to have a username, from user class
-   //public String getUsername() {
-   //return user != null ? user.getUsername() : null;
-   //}
 
 }

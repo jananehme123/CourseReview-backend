@@ -1,10 +1,10 @@
-// Source code is decompiled from a .class file using FernFlower decompiler.
 package com.example.coursereview.controller;
 
 import com.example.coursereview.model.Comment;
-import com.example.coursereview.service.commentService;
 import java.util.List;
 import java.util.Optional;
+
+import com.example.coursereview.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +41,7 @@ public class CommentController {
 
    @PutMapping({"/{id}"})
    public Comment updateComment(@PathVariable int id, @RequestBody Comment comment) {
-      comment.setId(id);
+      comment.setText(comment.getText());
       return this.commentService.saveComment(comment);
    }
 
