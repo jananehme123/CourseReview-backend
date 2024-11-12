@@ -42,4 +42,53 @@ public class ProfessorServiceImpl implements ProfessorService {
     public List<Professor> searchProfessors(String keyword) {
         return professorRepository.searchProfessors(keyword);
     }
+
+
+public class ProfessorServiceImpl implements ProfessorService {
+
+    private List<ProfessorRating> ratings = new ArrayList<>();
+
+    @Override
+    public List<Professor> getAllProfessors() {
+      
+    }
+
+    @Override
+    public Optional<Professor> getProfessorById(int id) {
+       
+    }
+
+    @Override
+    public Professor saveProfessor(Professor professor) {
+      
+    }
+
+    @Override
+    public void deleteProfessor(int id) {
+     
+    }
+
+    @Override
+    public List<Professor> searchProfessors(String keyword) {
+       
+    }
+
+    // Rating Methods
+    public void addRating(ProfessorRating rating) {
+        ratings.add(rating);
+    }
+
+    public double calculateAverageRating(int professorId) {
+        int sum = 0;
+        int count = 0;
+        for (ProfessorRating rating : ratings) {
+            if (rating.getProfessorId() == professorId) {
+                sum += rating.getRating();
+                count++;
+            }
+        }
+        return count == 0 ? 0 : (double) sum / count;
+    }
+}
+    
 }
