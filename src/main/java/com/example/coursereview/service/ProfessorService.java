@@ -23,9 +23,9 @@ public interface ProfessorService {
     double calculateAverageRating(int professorId);
 }
 
-
-
-
-
-    
+public interface ProfessorService {
+    void addRating(ProfessorRating rating);
+    double calculateAverageRating(int professorId);
+    // Other methods in the service interface
+}
 }
