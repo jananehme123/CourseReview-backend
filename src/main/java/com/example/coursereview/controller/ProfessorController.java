@@ -1,8 +1,10 @@
 package com.example.coursereview.controller;
 
 import com.example.coursereview.model.Professor;
+import com.example.coursereview.model.ProfessorRating;
 import com.example.coursereview.service.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
