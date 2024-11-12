@@ -49,4 +49,20 @@ public class ProfessorController {
     public List<Professor> searchProfessors(@RequestParam String keyword) {
         return professorService.searchProfessors(keyword);
     }
+
+@PostMapping("/rateProfessor")
+public ResponseEntity<String> rateProfessor(@RequestParam int professorId, @RequestParam int rating, @RequestParam String review) {
+    ProfessorRating professorRating = new ProfessorRating(0, professorId, rating, review);
+    professorService.addRating(professorRating);
+    return ResponseEntity.ok("Rating submitted successfully.");
+}
+
+
+
+
+
+
+
+
+    
 }
