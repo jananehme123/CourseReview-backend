@@ -90,5 +90,25 @@ public class ProfessorServiceImpl implements ProfessorService {
         return count == 0 ? 0 : (double) sum / count;
     }
 }
-    
+public class ProfessorServiceImpl implements ProfessorService {
+
+    private List<ProfessorRating> ratings = new ArrayList<>();
+
+    @Override
+    public void addRating(ProfessorRating rating) {
+        ratings.add(rating);
+    }
+
+    @Override
+    public double calculateAverageRating(int professorId) {
+        int sum = 0;
+        int count = 0;
+        for (ProfessorRating rating : ratings) {
+            if (rating.getProfessorId() == professorId) {
+                sum += rating.getRating();
+                count++;
+            }
+        }
+        return count == 0 ? 0 : (double) sum / count;
+    }
 }
