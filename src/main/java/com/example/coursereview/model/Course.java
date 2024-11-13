@@ -1,6 +1,9 @@
 package com.example.coursereview.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -21,6 +24,7 @@ public class Course {
     private String name;
     @ManyToOne
     @JoinColumn(name = "department_id")
+    @JsonIgnoreProperties("courses")
     private Department department;
 
     @ManyToMany
@@ -29,6 +33,7 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "professor_id")
     )
+//    @JsonManagedReference(value = "course-professor")
     private List<Professor> professors;
 
     // Getters and Setters

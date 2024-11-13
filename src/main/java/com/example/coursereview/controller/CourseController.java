@@ -34,11 +34,19 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public Course updateCourse(@PathVariable int id, @RequestBody Course course) {
-        course.setCode(course.getCode());
-        course.setNumber(course.getNumber());
-        course.setName(course.getName());
-        return courseService.saveCourse(course);
+    public Course updateCourse(@PathVariable int id, @RequestBody Course course) throws ResourceNotFoundException {
+        Optional<Course> existingCourseOpt = courseService.getCourseById(id);
+        if (existingCourseOpt.isPresent()) {
+            Course existingCourse = existingCourseOpt.get();
+            existingCourse.setCode(course.getCode());
+            existingCourse.setNumber(course.getNumber());
+            existingCourse.setName(course.getName());
+            existingCourse.setDepartment(course.getDepartment());
+            existingCourse.setProfessors(course.getProfessors());
+            return courseService.saveCourse(existingCourse);
+        } else {
+            throw new ResourceNotFoundException("Course not found with id " + id);
+        }
     }
 
     @DeleteMapping("/{id}")

@@ -1,11 +1,9 @@
 package com.example.coursereview.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
-
-import com.example.coursereview.model.Professor;
-import com.example.coursereview.model.Course;
 
 @Entity
 public class Department {
@@ -18,11 +16,13 @@ public class Department {
     private String faculty;
 
     // Define the one-to-many relationship with Course
-    @OneToMany(mappedBy = "department")
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JsonManagedReference(value = "department-course")
     private List<Course> courses;
 
     // Define the one-to-many relationship with Professor
     @OneToMany(mappedBy = "department")
+//    @JsonManagedReference(value = "department-professor")
     private List<Professor> professors;
 
     // Getters and Setters

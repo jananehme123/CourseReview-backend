@@ -1,5 +1,7 @@
 package com.example.coursereview.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -22,6 +24,7 @@ public class Comment {
    // Many-to-One relationship with Professor
    @ManyToOne
    @JoinColumn(name = "professor_id", nullable = false) // foreign key 
+   @JsonIgnoreProperties("comments")
    private Professor professor;
 
    public Comment() {

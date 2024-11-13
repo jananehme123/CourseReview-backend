@@ -33,10 +33,16 @@ public class ProfessorController {
     }
 
     @PutMapping("/{id}")
-    public Professor updateProfessor(@PathVariable int id, @RequestBody Professor professor) {
-        professor.setFirstName(professor.getFirstName());
-        professor.setLastName(professor.getLastName());
-        return professorService.saveProfessor(professor);
+    public Professor updateProfessor(@PathVariable int id, @RequestBody Professor professor) throws ResourceNotFoundException {
+        Optional<Professor> existingProfessorOpt = professorService.getProfessorById(id);
+        if (existingProfessorOpt.isPresent()) {
+            Professor existingProfessor = existingProfessorOpt.get();
+            existingProfessor.setFirstName(professor.getFirstName());
+            existingProfessor.setLastName(professor.getLastName());
+            return professorService.saveProfessor(existingProfessor);
+        } else {
+            throw new ResourceNotFoundException("Professor not found with id " + id);
+        }
     }
 
     @DeleteMapping("/{id}")

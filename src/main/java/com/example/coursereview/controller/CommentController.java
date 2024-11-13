@@ -40,9 +40,15 @@ public class CommentController {
    }
 
    @PutMapping({"/{id}"})
-   public Comment updateComment(@PathVariable int id, @RequestBody Comment comment) {
-      comment.setText(comment.getText());
-      return this.commentService.saveComment(comment);
+   public Comment updateComment(@PathVariable int id, @RequestBody Comment comment) throws ResourceNotFoundException {
+      Optional<Comment> existingCommentOpt = commentService.getCommentById(id);
+      if (existingCommentOpt.isPresent()) {
+         Comment existingComment = existingCommentOpt.get();
+         existingComment.setText(comment.getText());
+         return commentService.saveComment(existingComment);
+      } else {
+         throw new ResourceNotFoundException("Comment not found with id " + id);
+      }
    }
 
    @DeleteMapping({"/{id}"})

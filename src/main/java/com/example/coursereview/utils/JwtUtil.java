@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Service
 public class JwtUtil {
     private static final String SECRET_KEY = "M5rRzhwqGOVCj58lR/sDaGj+a3fBh9TPLDxIYLT+klvv06/r3icnkMBi6AaOzfdTwTvXxbgAg/+z56k6wrrRqZIZ3aE/R8QSEji+HkRVHOqkcxjVGYUCjZvByxr4FgH/w0FstwOiQW353GPSzvi1yVi7sTvqSICAG5nDHzGgs0BY8DqBX0Yw9shN8H45wyLl4ID8fMD+lxvGehTb0BUUwOIAhlkioNEBkgOKKeBh2tG9ISuMu/X3uLHe2g0C/OKBap7sGPJt+TyVvYGX3gtZ42f+4m0dBSePoAhTl2veGBAa01GFyJEedSGHOrkbSZ1U69vCA+PvZ8prWj/dZkgjcGY0BzajAsWAcUh7fNIGG7w=";
-    private final long EXPIRATION_TIME = 24  * 60 * 1000;
+    private final long EXPIRATION_TIME = 24  * 60 * 60 * 1000;
 
     public String generateToken(
             Map<String, Object> extraClaims,

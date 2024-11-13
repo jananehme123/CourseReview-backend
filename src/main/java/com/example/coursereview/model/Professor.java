@@ -1,5 +1,8 @@
 package com.example.coursereview.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -16,14 +19,18 @@ public class Professor {
 
     private String firstName;
     private String lastName;
-    private String email;
-    private String title;
     @ManyToOne
     @JoinColumn(name = "department_id")
+    @JsonIgnoreProperties("professors")
     private Department department;
 
     @ManyToMany(mappedBy = "professors")
+    @JsonIgnoreProperties("professors")
     private List<Course> courses;
+
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JsonManagedReference(value = "professor-comment")
+    private List<Comment> comments;
 
     // Getters and Setters
     public int getId() {
@@ -50,19 +57,4 @@ public class Professor {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }

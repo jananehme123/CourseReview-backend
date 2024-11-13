@@ -37,10 +37,16 @@ public class DepartmentController {
 
     // PUT /departments/{id}: Update an existing department
     @PutMapping("/{id}")
-    public Department updateDepartment(@PathVariable int id, @RequestBody Department department) {  // Changed Long to int
-        department.setName(department.getName());
-        department.setFaculty(department.getFaculty());
-        return departmentService.saveDepartment(department);
+    public Department updateDepartment(@PathVariable int id, @RequestBody Department department) throws ResourceNotFoundException {
+        Optional<Department> existingDepartmentOpt = departmentService.getDepartmentById(id);
+        if (existingDepartmentOpt.isPresent()) {
+            Department existingDepartment = existingDepartmentOpt.get();
+            existingDepartment.setName(department.getName());
+            existingDepartment.setFaculty(department.getFaculty());
+            return departmentService.saveDepartment(existingDepartment);
+        } else {
+            throw new ResourceNotFoundException("Department not found with id " + id);
+        }
     }
 
     // DELETE /departments/{id}: Delete a department by ID
