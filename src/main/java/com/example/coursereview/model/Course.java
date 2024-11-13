@@ -17,16 +17,19 @@ public class Course {
     private int id;
 
     private String code;
+    private int number;
     private String name;
-    private String description;
-    private int credits;
     @ManyToOne
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @ManyToOne
-    @JoinColumn(name = "professor_id")
-    private Professor professor;
+    @ManyToMany
+    @JoinTable(
+            name = "course_professor",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "professor_id")
+    )
+    private List<Professor> professors;
 
     // Getters and Setters
     public int getId() {
@@ -45,6 +48,14 @@ public class Course {
         this.code = code;
     }
 
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
     public String getName() {
         return name;
     }
@@ -53,20 +64,20 @@ public class Course {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public Department getDepartment() {
+        return department;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
-    public int getCredits() {
-        return credits;
+    public List<Professor> getProfessors() {
+        return professors;
     }
 
-    public void setCredits(int credits) {
-        this.credits = credits;
+    public void setProfessors(List<Professor> professors) {
+        this.professors = professors;
     }
 
 }

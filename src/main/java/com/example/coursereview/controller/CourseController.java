@@ -1,10 +1,13 @@
 package com.example.coursereview.controller;
 
 import com.example.coursereview.model.Course;
+import com.example.coursereview.model.Professor;
 import com.example.coursereview.service.CourseService;
+import jakarta.persistence.ManyToMany;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +35,9 @@ public class CourseController {
 
     @PutMapping("/{id}")
     public Course updateCourse(@PathVariable int id, @RequestBody Course course) {
-        course.setId(id);
+        course.setCode(course.getCode());
+        course.setNumber(course.getNumber());
+        course.setName(course.getName());
         return courseService.saveCourse(course);
     }
 
@@ -48,5 +53,11 @@ public class CourseController {
     @GetMapping("/search")
     public List<Course> searchCourses(@RequestParam String keyword) {
         return courseService.searchCourses(keyword);
+    }
+
+    @GetMapping("/{id}/professors")
+    public List<Professor> getProfessorsByCourseId(@PathVariable int id) {
+        Optional<Course> course = courseService.getCourseById(id);
+        return course.map(Course::getProfessors).orElse(Collections.emptyList());
     }
 }

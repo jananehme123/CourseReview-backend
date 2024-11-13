@@ -34,7 +34,8 @@ public class ProfessorController {
 
     @PutMapping("/{id}")
     public Professor updateProfessor(@PathVariable int id, @RequestBody Professor professor) {
-        professor.setId(id);
+        professor.setFirstName(professor.getFirstName());
+        professor.setLastName(professor.getLastName());
         return professorService.saveProfessor(professor);
     }
 

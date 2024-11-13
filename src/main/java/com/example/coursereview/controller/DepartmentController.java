@@ -1,10 +1,12 @@
 package com.example.coursereview.controller;
 
+import com.example.coursereview.model.Course;
 import com.example.coursereview.model.Department;
 import com.example.coursereview.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +38,8 @@ public class DepartmentController {
     // PUT /departments/{id}: Update an existing department
     @PutMapping("/{id}")
     public Department updateDepartment(@PathVariable int id, @RequestBody Department department) {  // Changed Long to int
-        department.setId(id);  // Make sure we update the correct department
+        department.setName(department.getName());
+        department.setFaculty(department.getFaculty());
         return departmentService.saveDepartment(department);
     }
 
@@ -53,6 +56,12 @@ public class DepartmentController {
     @GetMapping("/search")
     public List<Department> searchDepartments(@RequestParam String keyword) {
         return departmentService.searchDepartments(keyword);
+    }
+
+    @GetMapping("/{id}/courses")
+    public List<Course> getCoursesByDepartmentId(@PathVariable int id) {
+        Optional<Department> department = departmentService.getDepartmentById(id);
+        return department.map(Department::getCourses).orElse(Collections.emptyList());
     }
 }
 

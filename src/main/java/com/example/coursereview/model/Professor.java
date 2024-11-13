@@ -22,7 +22,7 @@ public class Professor {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @OneToMany(mappedBy = "professor")
+    @ManyToMany(mappedBy = "professors")
     private List<Course> courses;
 
     // Getters and Setters
