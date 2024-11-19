@@ -10,4 +10,7 @@ public interface CourseService {
     Course saveCourse(Course course);
     void deleteCourse(int id);
     List<Course> searchCourses(String keyword);
-}
+
+    List<Course> getCoursesByIds(List<Integer> courseIds);
+
+    Course addProfessorToCourse(int courseId, int professorId);}

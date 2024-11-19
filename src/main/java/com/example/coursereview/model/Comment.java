@@ -46,4 +46,20 @@ public class Comment {
       this.text = text;
    }
 
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Professor getProfessor() {
+        return this.professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
+
 }

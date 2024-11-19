@@ -46,11 +46,11 @@ public class AuthenticationService {
         }
         var jwt = jwtUtil.generateToken(user);
         SaveUserToken(user, jwt);
-//        try {
-//            emailService.sendVerificationEmail(user.getEmail(), jwt);
-//        } catch (Exception e) {
-//            LOGGER.error("Failed to send verification email, but user was registered: " + e.getMessage());
-//        }
+        try {
+            emailService.sendVerificationEmail(user.getEmail(), jwt);
+        } catch (Exception e) {
+            LOGGER.error("Failed to send verification email, but user was registered: " + e.getMessage());
+        }
         return AuthenticationResponse.builder()
                 .token(jwt)
                 .id(user.getId())
@@ -75,14 +75,14 @@ public class AuthenticationService {
         var jwt = jwtUtil.generateToken(user);
         revokeAllUserTokens(user);
         SaveUserToken(user, jwt);
-//        if (!user.isVerified()) {
-//            try {
-//                emailService.sendVerificationEmail(user.getEmail(), jwt);
-//            } catch (Exception e) {
-//                LOGGER.error("Failed to send verification email, but user was registered: " + e.getMessage());
-//            }
-//            throw new RuntimeException("User account is not verified");
-//        }
+        if (!user.isVerified()) {
+            try {
+                emailService.sendVerificationEmail(user.getEmail(), jwt);
+            } catch (Exception e) {
+                LOGGER.error("Failed to send verification email, but user was registered: " + e.getMessage());
+            }
+            throw new RuntimeException("User account is not verified");
+        }
         return AuthenticationResponse.builder()
                 .token(jwt)
                 .id(user.getId())

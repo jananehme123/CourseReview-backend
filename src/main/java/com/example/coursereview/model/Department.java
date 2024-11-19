@@ -1,11 +1,11 @@
 package com.example.coursereview.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
+@Table(name = "department", uniqueConstraints = @UniqueConstraint(columnNames = {"name", "faculty"}))
 public class Department {
 
     @Id
@@ -17,13 +17,8 @@ public class Department {
 
     // Define the one-to-many relationship with Course
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JsonManagedReference(value = "department-course")
     private List<Course> courses;
 
-    // Define the one-to-many relationship with Professor
-    @OneToMany(mappedBy = "department")
-//    @JsonManagedReference(value = "department-professor")
-    private List<Professor> professors;
 
     // Getters and Setters
     public int getId() {
@@ -58,11 +53,4 @@ public class Department {
         this.courses = courses;
     }
 
-    public List<Professor> getProfessors() {
-        return professors;
-    }
-
-    public void setProfessors(List<Professor> professors) {
-        this.professors = professors;
-    }
 }

@@ -1,18 +1,14 @@
 package com.example.coursereview.model;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
 
-import com.example.coursereview.model.Department;
-import com.example.coursereview.model.Professor;
 
 @Entity
-@Table(name = "Course")
+@Table(name = "Course", uniqueConstraints = @UniqueConstraint(columnNames = {"code", "number"}))
 public class Course {
 
     @Id
@@ -27,13 +23,8 @@ public class Course {
     @JsonIgnoreProperties("courses")
     private Department department;
 
-    @ManyToMany
-    @JoinTable(
-            name = "course_professor",
-            joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "professor_id")
-    )
-//    @JsonManagedReference(value = "course-professor")
+    @ManyToMany(mappedBy = "courses", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("courses")
     private List<Professor> professors;
 
     // Getters and Setters
