@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ProfessorRepository extends JpaRepository<Professor, Integer> {
-    @Query("SELECT p FROM Professor p WHERE p.firstName LIKE %:keyword% OR p.lastName LIKE %:keyword% OR p.department.name LIKE %:keyword%")
+    @Query("SELECT p FROM Professor p WHERE p.firstName LIKE %:keyword% OR p.lastName LIKE %:keyword%")
     List<Professor> searchProfessors(@Param("keyword") String keyword);
 }

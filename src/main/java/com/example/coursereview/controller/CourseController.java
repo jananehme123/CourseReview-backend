@@ -3,12 +3,16 @@ package com.example.coursereview.controller;
 import com.example.coursereview.model.Course;
 import com.example.coursereview.model.Professor;
 import com.example.coursereview.service.CourseService;
+import com.example.coursereview.service.ProfessorService;
 import jakarta.persistence.ManyToMany;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -17,6 +21,8 @@ public class CourseController {
 
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private ProfessorService professorService;
 
     @GetMapping
     public List<Course> getAllCourses() {
@@ -67,5 +73,11 @@ public class CourseController {
     public List<Professor> getProfessorsByCourseId(@PathVariable int id) {
         Optional<Course> course = courseService.getCourseById(id);
         return course.map(Course::getProfessors).orElse(Collections.emptyList());
+    }
+
+    @Transactional
+    @PutMapping("/{id}/professors")
+    public ResponseEntity<Course> linkProfessorsToCourse(@PathVariable int id, @RequestBody int professorId) throws ResourceNotFoundException {
+        return ResponseEntity.ok(courseService.addProfessorToCourse(id, professorId));
     }
 }

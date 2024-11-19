@@ -1,26 +1,31 @@
 package com.example.coursereview.model;
 
-public class ProfessorRating {
-    private int id;
-    private int professorId;
-    private int rating; // rating value, e.g., 1-5 stars
-    private String review;
+import jakarta.persistence.*;
 
-    public ProfessorRating(int id, int professorId, int rating, String review) {
+@Entity
+@Table(name = "ProfessorRating")
+public class ProfessorRating {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private int rating; // rating value, e.g., 1-5 stars
+
+    @ManyToOne
+    @JoinColumn(name = "professor_id", insertable = false)
+    private Professor professor;
+
+    public ProfessorRating(int id, int professorId, int rating) {
         this.id = id;
-        this.professorId = professorId;
         this.rating = rating;
-        this.review = review;
     }
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public int getProfessorId() { return professorId; }
-    public void setProfessorId(int professorId) { this.professorId = professorId; }
+    public Professor getProfessor() { return professor; }
+    public void setProfessor(Professor professor) { this.professor = professor; }
 
     public int getRating() { return rating; }
     public void setRating(int rating) { this.rating = rating; }
 
-    public String getReview() { return review; }
-    public void setReview(String review) { this.review = review; }
+
 }

@@ -1,16 +1,13 @@
 package com.example.coursereview.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
 
-import com.example.coursereview.model.Department;
-import com.example.coursereview.model.Course;
 
 @Entity
+@Table(name = "professor", uniqueConstraints = @UniqueConstraint(columnNames = {"firstName", "lastName"}))
 public class Professor {
 
     @Id
@@ -19,18 +16,21 @@ public class Professor {
 
     private String firstName;
     private String lastName;
-    @ManyToOne
-    @JoinColumn(name = "department_id")
-    @JsonIgnoreProperties("professors")
-    private Department department;
 
-    @ManyToMany(mappedBy = "professors")
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "course_professor",
+            joinColumns = @JoinColumn(name = "professor_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
     @JsonIgnoreProperties("professors")
     private List<Course> courses;
 
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JsonManagedReference(value = "professor-comment")
     private List<Comment> comments;
+
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProfessorRating> ratings;
 
     // Getters and Setters
     public int getId() {
@@ -55,6 +55,22 @@ public class Professor {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public List<ProfessorRating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(List<ProfessorRating> ratings) {
+        this.ratings = ratings;
     }
 
 }
