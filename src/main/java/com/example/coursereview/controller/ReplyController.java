@@ -25,9 +25,20 @@ public class ReplyController {
    public ReplyController() {
    }
 
-   @PostMapping
-   public Reply addReply(@RequestBody Reply reply) {
-      return this.replyService.saveReply(reply);
+//    @PostMapping
+//    public Reply addReply(@RequestBody Reply reply) {
+//       return this.replyService.saveReply(reply);
+//    }
+
+   @PostMapping("/comment/{commentId}/reply")
+   public Reply addReplyToComment (@PathVariable int commentId, @RequestBody Reply reply) throws ResourceNotFoundException{
+    Optional<Comment> parentCommentOpt = commentService.getCommentById(commentId);
+    if(parentCommentOpt.isPresent()){
+        reply.setParentComment(parentCommentOpt.get());
+        return replyService,saveReply(reply);
+    } else{
+        throw new ResourceNotFoundException ("Comment not found with id" + commentId);
+    }
    }
 
    @GetMapping("/comment/{commentId}")
