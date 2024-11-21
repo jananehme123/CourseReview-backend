@@ -27,6 +27,10 @@ public class Comment {
    @JsonIgnoreProperties("comments")
    private Professor professor;
 
+  // One-to-Many relationship with Reply
+  @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Reply> replies;
+
    public Comment() {
    }
 
@@ -59,7 +63,14 @@ public class Comment {
     }
 
     public void setProfessor(Professor professor) {
-        this.professor = professor;
+      this.professor = professor;
     }
 
+    public List<Reply> getReplies() {
+      return replies;
+    }
+
+    public void setReplies(List<Reply> replies) {
+       this.replies = replies;
+    }
 }
