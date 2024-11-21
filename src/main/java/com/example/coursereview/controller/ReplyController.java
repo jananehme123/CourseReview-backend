@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.example.coursereview.service.ReplyService;
+import com.example.coursereview.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,9 @@ public class ReplyController {
    @Autowired
    private ReplyService replyService;
 
+   @Autowired
+   private CommentService commentService;
+
    public ReplyController() {
    }
 
@@ -35,7 +39,7 @@ public class ReplyController {
     Optional<Comment> parentCommentOpt = commentService.getCommentById(commentId);
     if(parentCommentOpt.isPresent()){
         reply.setParentComment(parentCommentOpt.get());
-        return replyService,saveReply(reply);
+        return replyService.saveReply(reply);
     } else{
         throw new ResourceNotFoundException ("Comment not found with id" + commentId);
     }
