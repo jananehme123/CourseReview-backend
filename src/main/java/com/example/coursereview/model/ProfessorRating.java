@@ -1,5 +1,6 @@
 package com.example.coursereview.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,14 +10,19 @@ public class ProfessorRating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int rating; // rating value, e.g., 1-5 stars
+    private int userId;
 
     @ManyToOne
-    @JoinColumn(name = "professor_id", insertable = false)
+    @JoinColumn(name = "professor_id", nullable = false)
+    @JsonIgnoreProperties("ratings")
     private Professor professor;
 
-    public ProfessorRating(int id, int professorId, int rating) {
+    public ProfessorRating() { }
+    public ProfessorRating(int id, Professor professor, int rating, int userId) {
         this.id = id;
+        this.professor = professor;
         this.rating = rating;
+        this.userId = userId;
     }
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -27,5 +33,7 @@ public class ProfessorRating {
     public int getRating() { return rating; }
     public void setRating(int rating) { this.rating = rating; }
 
+    public int getUserId() { return userId; }
+    public void setUserId(int userId) { this.userId = userId; }
 
 }
