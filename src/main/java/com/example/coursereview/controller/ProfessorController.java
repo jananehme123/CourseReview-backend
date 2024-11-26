@@ -3,9 +3,14 @@ package com.example.coursereview.controller;
 import com.example.coursereview.model.Course;
 import com.example.coursereview.model.Professor;
 import com.example.coursereview.model.ProfessorRating;
+import com.example.coursereview.repository.ProfessorRatingRepository;
+import com.example.coursereview.repository.ProfessorRepository;
 import com.example.coursereview.service.CourseService;
 import com.example.coursereview.service.ProfessorService;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,12 +20,16 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/professors")
+@RequiredArgsConstructor
 public class ProfessorController {
 
-    @Autowired
-    private ProfessorService professorService;
-    @Autowired
-    private CourseService courseService;
+    private final ProfessorService professorService;
+
+    private final CourseService courseService;
+
+    private final ProfessorRepository professorRepository;
+
+    private final ProfessorRatingRepository professorRatingRepository;
 
     @GetMapping
     public List<Professor> getAllProfessors() {
@@ -63,19 +72,28 @@ public class ProfessorController {
         professorService.deleteProfessor(id);
     }
 
-    public ProfessorController(ProfessorService professorService) {
-        this.professorService = professorService;
-    }
 
     @GetMapping("/search")
     public List<Professor> searchProfessors(@RequestParam String keyword) {
         return professorService.searchProfessors(keyword);
     }
 
-    @PostMapping("/rateProfessor")
-    public ResponseEntity<String> rateProfessor(@RequestParam int professorId, @RequestParam int rating) {
-        ProfessorRating professorRating = new ProfessorRating(0, professorId, rating);
-        professorService.addRating(professorRating);
+    @PostMapping("/{id}/rateProfessor")
+    public ResponseEntity<String> rateProfessor(@PathVariable int id, @RequestParam int rating, @RequestParam int userId) {
+        Optional<Professor> professorOpt = professorRepository.findById(id);
+        if (professorOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Professor not found");
+        }
+        Professor professor = professorOpt.get();
+        Optional<ProfessorRating> existingRatingOpt = professorRatingRepository.findByProfessorIdAndUserId(id, userId);
+        if (existingRatingOpt.isPresent()) {
+            ProfessorRating existingRating = existingRatingOpt.get();
+            existingRating.setRating(rating);
+            professorRatingRepository.save(existingRating);
+        } else {
+            ProfessorRating newRating = new ProfessorRating(0, professor, rating, userId);
+            professorRatingRepository.save(newRating);
+        }
         return ResponseEntity.ok("Rating submitted successfully.");
     }
 

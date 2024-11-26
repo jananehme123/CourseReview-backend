@@ -30,6 +30,7 @@ public class Professor {
     private List<Comment> comments;
 
     @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("professor")
     private List<ProfessorRating> ratings;
 
     // Getters and Setters

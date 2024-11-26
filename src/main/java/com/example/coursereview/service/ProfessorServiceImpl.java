@@ -6,6 +6,7 @@ import com.example.coursereview.model.Professor;
 import com.example.coursereview.model.ProfessorRating;
 import com.example.coursereview.repository.ProfessorRatingRepository;
 import com.example.coursereview.repository.ProfessorRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +15,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ProfessorServiceImpl implements ProfessorService {
 
-    @Autowired
-    private ProfessorRepository professorRepository;
-    private ProfessorService professorService;
-    private CourseService courseService;
-    @Autowired
-    private ProfessorRatingRepository professorRatingRepository;
+    private final ProfessorRepository professorRepository;
+    private final CourseService courseService;
+    private final ProfessorRatingRepository professorRatingRepository;
 
     @Override
     public List<Professor> getAllProfessors() {
@@ -46,7 +45,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public void deleteProfessor(int id) throws ResourceNotFoundException {
-        Optional<Professor> professorOpt = professorService.getProfessorById(id);
+        Optional<Professor> professorOpt = getProfessorById(id);
         if (professorOpt.isPresent()) {
             Professor professor = professorOpt.get();
 
@@ -55,17 +54,19 @@ public class ProfessorServiceImpl implements ProfessorService {
                 course.getProfessors().remove(professor);
                 courseService.saveCourse(course);
             }
+            List<ProfessorRating> ratings = professorRatingRepository.findByProfessorId(professor.getId());
+            for (ProfessorRating rating : ratings) {
+                professorRatingRepository.delete(rating);
+            }
             professor.setCourses(null);
-            professorService.saveProfessor(professor);
-            professorService.deleteProfessor(id);
+            professor.setRatings(null);
+            saveProfessor(professor);
+            professorRepository.delete(professor);
         } else {
             throw new ResourceNotFoundException("Professor not found with id " + id);
         }
     }
 
-    public ProfessorServiceImpl(ProfessorRepository professorRepository) {
-        this.professorRepository = professorRepository;
-    }
 
     @Override
     public List<Professor> searchProfessors(String keyword) {
