@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReplyService {
-    List<Reply> getAllReplies();
+    Reply addReplyToComment(int commentId, Reply reply) throws ResourceNotFoundException;
     List<Reply> getRepliesByCommentId (int commentId);
+    List<Reply> getAllReplies();
     Optional<Reply> getReplyById(int Id);
-    Reply saveReply(Reply reply);
+    Reply updateReply(int id, Reply reply) throws ResourceNotFoundException;
     void deleteReply(int id);
 }

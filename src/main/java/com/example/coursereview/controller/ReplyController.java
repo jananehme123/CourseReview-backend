@@ -4,37 +4,35 @@ import com.example.coursereview.model.Reply;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.example.coursereview.model.Professor;
+import com.example.coursereview.model.ProfessorRating;
+import com.example.coursereview.model.Reply;
+import com.example.coursereview.service.ProfessorService;
 import com.example.coursereview.service.ReplyService;
 import com.example.coursereview.service.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.coursereview.repository.ProfessorRepository;
+import com.example.coursereview.repository.ReplyRepository;
+import com.example.coursereview.repository.CommentRepository;
+import lombok.RequiredArgsConstructor; 
 
 @RestController
 @RequestMapping({"/replies"})
 public class ReplyController {
 
-   @Autowired
    private ReplyService replyService;
-
-   @Autowired
    private CommentService commentService;
 
    public ReplyController() {
    }
 
-//    @PostMapping
-//    public Reply addReply(@RequestBody Reply reply) {
-//       return this.replyService.saveReply(reply);
-//    }
 
-   @PostMapping("/comment/{commentId}/reply")
+   @PostMapping("/comment/{commentId}/replies")
    public Reply addReplyToComment (@PathVariable int commentId, @RequestBody Reply reply) throws ResourceNotFoundException{
     Optional<Comment> parentCommentOpt = commentService.getCommentById(commentId);
     if(parentCommentOpt.isPresent()){
@@ -45,7 +43,7 @@ public class ReplyController {
     }
    }
 
-   @GetMapping("/comment/{commentId}")
+   @GetMapping("/{commentId}/replies")
     public List<Reply> getRepliesByCommentId(@PathVariable int commentId) {
         return replyService.getRepliesByCommentId(commentId);
     }

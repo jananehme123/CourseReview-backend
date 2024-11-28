@@ -20,7 +20,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public List<Comment> getAllComments() {
+    public List<Comment> getAllCommentsForProfessor(int professorId) {
         return commentRepository.findAll();
     }
 
@@ -30,16 +30,42 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Comment saveComment(Comment comment) {
+    public Comment addComment(Comment comment) {
         if (ProhibitedWordsFilter.containsProhibitedWords(comment.getText())) {
             throw new IllegalStateException("Comment contains prohibited words");
         }
-        return commentRepository.save(comment);
+        return commentRepository.save(comment); 
+    }
+
+    @Override
+    public Comment updateComment(int id, Comment comment) {
+        if (ProhibitedWordsFilter.containsProhibitedWords(comment.getText())) {
+            throw new IllegalStateException("Comment contains prohibited words");
+        }
+        return commentRepository.updateById(id, comment); 
     }
 
     @Override
     public void deleteComment(int id) {
-        commentRepository.deleteById(id);
+        //commentRepository.deleteById(id);
+
+        Optional<Comment> commentOpt = getCommentById(id);
+        if (commentOpt.isPresent()) {
+            Comment comment = commentOpt.get();
+
+            List<Professor> professors = comment.getProfessor();
+            for (Professor professor : professors) {
+                professor.getComments().remove(comment);
+                professorService.saveComment(comment);
+            }
+            List<Reply> replies = replyRepository.findByParentCommentId(comment.getId());
+            for (Reply reply : replies) {
+                replyRepository.delete(reply);
+            }
+            comment.setComments(null);
+            comment.setReplies(null);
+            saveComment(comment);
+            commentRepository.delete(comment);
     }
 
 }

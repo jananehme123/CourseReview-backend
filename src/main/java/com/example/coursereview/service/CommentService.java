@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentService {
-    List<Comment> getAllComments();
+    List<Comment> getAllCommentsForProfessor(int professorId);
     Optional<Comment> getCommentById(int id);
-    Comment saveComment(Comment comment);
+    Comment addComment(Comment comment);
+    Comment updateComment (int id, Comment comment) throws ResourceNotFoundException;
     void deleteComment(int id);
 }

@@ -19,6 +19,7 @@ public class Comment {
    // Many-to-One relationship with User
    @ManyToOne
    @JoinColumn(name = "user_id", nullable = false) // foreign key
+   @JsonIgnoreProperties("comments")
    private User user;
 
    // Many-to-One relationship with Professor

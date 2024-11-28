@@ -20,8 +20,8 @@ public class ReplyServiceImpl implements ReplyService{
     }
 
     @Override
-    public List<Reply> getAllReplies() {
-        return replyRepository.findAll();
+    public Reply addReplyToComment(int commentId, Reply reply) throws ResourceNotFoundException {
+        return replyRepository.addById(commentId, reply);
     }
 
     @Override
@@ -30,12 +30,17 @@ public class ReplyServiceImpl implements ReplyService{
     }
 
     @Override
+    public List<Reply> getAllReplies() {
+        return replyRepository.findAll();
+    }
+
+    @Override
     public Optional<Reply> getReplyById(int id) {
         return replyRepository.findById(id);
     }
 
     @Override
-    public Reply saveReply(Reply reply) {
+    public Reply updateReply(Reply reply) throws ResourceNotFoundException {
         if (ProhibitedWordsFilter.containsProhibitedWords(reply.getText())) {
             throw new IllegalStateException("Reply contains prohibited words");
         }
