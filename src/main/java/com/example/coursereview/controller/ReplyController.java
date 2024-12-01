@@ -1,6 +1,7 @@
 package com.example.coursereview.controller;
 
-import com.example.coursereview.model.Reply;
+import com.example.coursereview.model.*;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -10,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.coursereview.model.Professor;
-import com.example.coursereview.model.ProfessorRating;
 import com.example.coursereview.model.Reply;
 import com.example.coursereview.service.ProfessorService;
 import com.example.coursereview.service.ReplyService;
@@ -25,19 +24,20 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping({"/replies"})
 public class ReplyController {
 
-   private ReplyService replyService;
-   private CommentService commentService;
+   private final ReplyService replyService;
+   private final CommentService commentService;
 
-   public ReplyController() {
+   public ReplyController(ReplyService replyService, CommentService commentService) {
+       this.replyService = replyService;
+       this.commentService = commentService;
    }
 
-
    @PostMapping("/comment/{commentId}/replies")
-   public Reply addReplyToComment (@PathVariable int commentId, @RequestBody Reply reply) throws ResourceNotFoundException{
+   public Reply addReply (@PathVariable int commentId, @RequestBody Reply reply) throws ResourceNotFoundException{
     Optional<Comment> parentCommentOpt = commentService.getCommentById(commentId);
     if(parentCommentOpt.isPresent()){
         reply.setParentComment(parentCommentOpt.get());
-        return replyService.saveReply(reply);
+        return replyService.addReplyToComment(commentId, reply);
     } else{
         throw new ResourceNotFoundException ("Comment not found with id" + commentId);
     }
@@ -65,7 +65,7 @@ public class ReplyController {
       if (existingReplyOpt.isPresent()) {
          Reply existingReply = existingReplyOpt.get();
          existingReply.setText(reply.getText());
-         return replyService.saveReply(existingReply);
+         return replyService.updateReply(existingReply);
       } else {
          throw new ResourceNotFoundException("Reply not found with id " + id);
       }

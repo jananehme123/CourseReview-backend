@@ -22,23 +22,22 @@ import com.example.coursereview.repository.CommentRepository;
 import lombok.RequiredArgsConstructor; 
 
 @RestController
-@RequestMapping({"/comments"})
+@RequestMapping({"/reviews"})
 @RequiredArgsConstructor
 public class CommentController {
 
    private final CommentService commentService;
    private final ReplyService replyService;
 
-   public CommentController() {}
-
+   //public CommentController() {}
    // @GetMapping
    // public List<Comment> getAllComments() {
    //    return this.commentService.getAllComments();
    // }
 
    @GetMapping("/professors/{professorId}")
-   public ResponseEntity<List<Comment>> getAllCommentsForProfessor (@PathVariable int professorId){
-      List<Comment> comments = commentService.getAllCommentsByProfessorId(professorId);
+   public ResponseEntity<List<Comment>> getAllCommentsByProfessorId (@PathVariable int professorId){
+      List<Comment> comments = commentService.getAllCommentsForProfessor(professorId);
       return ResponseEntity.ok(comments);
    }
 
@@ -68,8 +67,7 @@ public class CommentController {
       if (existingCommentOpt.isPresent()) {
          Comment existingComment = existingCommentOpt.get();
          existingComment.setText(comment.getText());
-         Comment updatedComment = commentService.saveComment(existingComment)
-         return ResponseEntity.ok(updatedComment);
+         return commentService.saveComment(existingComment);
       } else {
          throw new ResourceNotFoundException("Comment not found with id " + id);
       }

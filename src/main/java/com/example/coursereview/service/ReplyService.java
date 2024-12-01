@@ -1,5 +1,6 @@
 package com.example.coursereview.service;
 
+import com.example.coursereview.controller.ResourceNotFoundException;
 import com.example.coursereview.model.Reply;
 
 import java.util.List;
@@ -10,6 +11,6 @@ public interface ReplyService {
     List<Reply> getRepliesByCommentId (int commentId);
     List<Reply> getAllReplies();
     Optional<Reply> getReplyById(int Id);
-    Reply updateReply(int id, Reply reply) throws ResourceNotFoundException;
+    Reply updateReply(Reply reply) throws ResourceNotFoundException;
     void deleteReply(int id);
 }

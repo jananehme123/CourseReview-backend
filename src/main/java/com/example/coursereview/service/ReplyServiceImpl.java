@@ -1,6 +1,9 @@
 package com.example.coursereview.service;
 
+import com.example.coursereview.controller.ResourceNotFoundException;
+import com.example.coursereview.model.Comment;
 import com.example.coursereview.model.Reply;
+import com.example.coursereview.repository.CommentRepository;
 import com.example.coursereview.repository.ReplyRepository;
 import com.example.coursereview.utils.ProhibitedWordsFilter;
 import org.springframework.stereotype.Service;
@@ -14,14 +17,22 @@ import java.util.Optional;
 public class ReplyServiceImpl implements ReplyService{
 
     private final ReplyRepository replyRepository;
+    private final CommentRepository commentRepository;
 
-    public ReplyServiceImpl(ReplyRepository replyRepository) {
+    public ReplyServiceImpl(ReplyRepository replyRepository, CommentRepository commentRepository) {
         this.replyRepository = replyRepository;
+        this.commentRepository = commentRepository;
     }
 
     @Override
     public Reply addReplyToComment(int commentId, Reply reply) throws ResourceNotFoundException {
-        return replyRepository.addById(commentId, reply);
+       // return replyRepository.addById(commentId, reply);
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        if (!comment.isPresent()) {
+            throw new ResourceNotFoundException("Comment not found with id " + commentId);
+        }
+        reply.setParentComment(comment.get());
+        return replyRepository.save(reply);
     }
 
     @Override
