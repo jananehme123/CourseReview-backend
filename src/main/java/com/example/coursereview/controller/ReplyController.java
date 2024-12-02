@@ -32,7 +32,7 @@ public class ReplyController {
        this.commentService = commentService;
    }
 
-   @PostMapping("/{commentId}")
+   @PostMapping("/comment/{commentId}/replies")
    public Reply addReply (@PathVariable int commentId, @RequestBody Reply reply) throws ResourceNotFoundException{
     Optional<Comment> parentCommentOpt = commentService.getCommentById(commentId);
     if(parentCommentOpt.isPresent()){

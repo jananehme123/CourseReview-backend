@@ -19,13 +19,11 @@ public class Reply {
    // Many-to-One relationship with Comment (parent Comment)
    @ManyToOne
    @JoinColumn(name = "comment_id", nullable = false) // foreign key
-   @JsonBackReference
    private Comment parentComment;
 
    // Many-to-One relationship with User
    @ManyToOne
    @JoinColumn(name = "user_id", nullable = false) // foreign key 
-   @JsonIgnoreProperties("replies")
    private User user;
 
    public Reply() {
