@@ -22,44 +22,13 @@ import com.example.coursereview.repository.CommentRepository;
 import lombok.RequiredArgsConstructor; 
 
 @RestController
-@RequestMapping({"/reviews"})
+@RequestMapping({"/comments"})
 @RequiredArgsConstructor
 public class CommentController {
 
    private final CommentService commentService;
    private final ReplyService replyService;
 
-   //public CommentController() {}
-   // @GetMapping
-   // public List<Comment> getAllComments() {
-   //    return this.commentService.getAllComments();
-   // }
-
-   @GetMapping("/professors/{professorId}")
-   public ResponseEntity<List<Comment>> getAllCommentsByProfessorId (@PathVariable int professorId){
-      List<Comment> comments = commentService.getAllCommentsForProfessor(professorId);
-      return ResponseEntity.ok(comments);
-   }
-
-   @GetMapping({"/{id}"})
-   public Optional<Comment> getCommentById(@PathVariable int id) {
-      return this.commentService.getCommentById(id);
-   }
-
-   // @GetMapping("/{id}")
-   // public ResponseEntity<Comment> getCommentById(@PathVariable int id) {
-   //    Optional<Comment> commentOpt = this.commentService.getCommentById(id);
-   //    if (commentOpt.isPresent()) {
-   //       return ResponseEntity.ok(commentOpt.get());
-   //    } else {
-   //       return ResponseEntity.notFound().build();
-   //    }
-   // }
-
-   @PostMapping
-   public Comment addComment(@RequestBody Comment comment) {
-      return this.commentService.saveComment(comment);
-   }
 
    @PutMapping({"/{id}"})
    public Comment updateComment(@PathVariable int id, @RequestBody Comment comment) throws ResourceNotFoundException {
@@ -77,4 +46,14 @@ public class CommentController {
    public void deleteComment(@PathVariable int id) {
       this.commentService.deleteComment(id);
    }
+
+   @GetMapping("/{id}/replies")
+   public List<Reply> getRepliesByCommentId(@PathVariable int id) {
+      return replyService.getRepliesByCommentId(id);
+   }
+
+   @PostMapping("/{id}/replies")
+    public Reply addReplyToComment(@PathVariable int id, @RequestBody Reply reply) throws ResourceNotFoundException {
+        return replyService.addReplyToComment(id, reply);
+    }
 }

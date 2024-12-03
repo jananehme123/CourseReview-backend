@@ -3,9 +3,12 @@ package com.example.coursereview.service;
 import com.example.coursereview.controller.ResourceNotFoundException;
 import com.example.coursereview.model.Comment;
 import com.example.coursereview.model.Professor;
+import com.example.coursereview.model.User;
 import com.example.coursereview.repository.CommentRepository;
 import com.example.coursereview.repository.ProfessorRepository;
+import com.example.coursereview.repository.UserRepository;
 import com.example.coursereview.utils.ProhibitedWordsFilter;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +20,12 @@ public class CommentServiceImpl implements CommentService{
 
     private final CommentRepository commentRepository;
     private final ProfessorRepository professorRepository;
+    private final UserRepository userRepository;
 
-    public CommentServiceImpl(CommentRepository commentRepository, ProfessorRepository professorRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, ProfessorRepository professorRepository, UserRepository userRepository) {
         this.commentRepository = commentRepository;
         this.professorRepository = professorRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -39,11 +44,20 @@ public class CommentServiceImpl implements CommentService{
             throw new IllegalStateException("Comment contains prohibited words");
         }
         Optional<Professor> professor = professorRepository.findById(professorId);
-        if (!professor.isPresent()) {
+        if (professor.isEmpty()) {
             throw new ResourceNotFoundException("Professor not found with id " + professorId);
         }
+
+        if (comment.getUser() == null || comment.getUser().getId() == 0) {
+            throw new IllegalStateException("User ID is required");
+        }
+        Optional<User> user = userRepository.findById(comment.getUser().getId());
+        if (user.isEmpty()) {
+            throw new ResourceNotFoundException("User not found with id " + comment.getUser().getId());
+        }
         comment.setProfessor(professor.get());
-        return commentRepository.save(comment); 
+        comment.setUser(user.get());
+        return commentRepository.save(comment);
     }
 
     @Override
@@ -52,7 +66,7 @@ public class CommentServiceImpl implements CommentService{
             throw new IllegalStateException("Comment contains prohibited words");
         }
         Optional<Comment> existingCommentOpt = commentRepository.findById(id);
-        if (!existingCommentOpt.isPresent()) {
+        if (existingCommentOpt.isEmpty()) {
             throw new ResourceNotFoundException("Comment not found with id " + id);
         }
         Comment existingComment = existingCommentOpt.get();
@@ -68,24 +82,6 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public void deleteComment(int id) {
         commentRepository.deleteById(id);
-
-//        Optional<Comment> commentOpt = getCommentById(id);
-//        if (commentOpt.isPresent()) {
-//            Comment comment = commentOpt.get();
-//
-//            List<Professor> professors = comment.getProfessor();
-//            for (Professor professor : professors) {
-//                professor.getComments().remove(comment);
-//                professorService.saveComment(comment);
-//            }
-//            List<Reply> replies = replyRepository.findByParentCommentId(comment.getId());
-//            for (Reply reply : replies) {
-//                replyRepository.delete(reply);
-//            }
-//            comment.setComments(null);
-//            comment.setReplies(null);
-//            saveComment(comment);
-//            commentRepository.delete(comment);
     }
 
 }

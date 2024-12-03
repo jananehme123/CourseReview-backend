@@ -3,9 +3,12 @@ package com.example.coursereview.service;
 import com.example.coursereview.controller.ResourceNotFoundException;
 import com.example.coursereview.model.Comment;
 import com.example.coursereview.model.Reply;
+import com.example.coursereview.model.User;
 import com.example.coursereview.repository.CommentRepository;
 import com.example.coursereview.repository.ReplyRepository;
+import com.example.coursereview.repository.UserRepository;
 import com.example.coursereview.utils.ProhibitedWordsFilter;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,20 +21,31 @@ public class ReplyServiceImpl implements ReplyService{
 
     private final ReplyRepository replyRepository;
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
 
-    public ReplyServiceImpl(ReplyRepository replyRepository, CommentRepository commentRepository) {
+    public ReplyServiceImpl(ReplyRepository replyRepository, CommentRepository commentRepository, UserRepository userRepository) {
         this.replyRepository = replyRepository;
         this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public Reply addReplyToComment(int commentId, Reply reply) throws ResourceNotFoundException {
-       // return replyRepository.addById(commentId, reply);
-        Optional<Comment> comment = commentRepository.findById(commentId);
-        if (!comment.isPresent()) {
-            throw new ResourceNotFoundException("Comment not found with id " + commentId);
+        if (ProhibitedWordsFilter.containsProhibitedWords(reply.getText())) {
+            throw new IllegalStateException("Comment contains prohibited words");
         }
-        reply.setParentComment(comment.get());
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Comment not found with id " + commentId));
+
+        if (reply.getUser() == null || reply.getUser().getId() == 0) {
+            throw new IllegalStateException("User ID is required");
+        }
+        Optional<User> user = userRepository.findById(reply.getUser().getId());
+        if (user.isEmpty()) {
+            throw new ResourceNotFoundException("User not found with id " + reply.getUser().getId());
+        }
+        reply.setParentComment(comment);
+        reply.setUser(user.get());
         return replyRepository.save(reply);
     }
 

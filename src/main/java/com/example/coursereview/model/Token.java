@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Data
 @Builder
@@ -29,5 +30,6 @@ public class Token {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties("tokens")
     private User user;
 }

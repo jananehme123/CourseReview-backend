@@ -1,7 +1,6 @@
 package com.example.coursereview.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import java.util.List;
 @Table(
    name = "Comment"
 )
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Comment {
    @Id
    @GeneratedValue(
@@ -24,13 +24,14 @@ public class Comment {
    private User user;
 
    // Many-to-One relationship with Professor
-   @ManyToOne
-   @JoinColumn(name = "professor_id", nullable = false) // foreign key 
-   @JsonIgnoreProperties("comments")
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "professor_id", nullable = false) // foreign key
+   @JsonBackReference
    private Professor professor;
 
   // One-to-Many relationship with Reply
-  @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "parentComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+  @JsonManagedReference
   private List<Reply> replies;
 
    public Comment() {
