@@ -1,20 +1,22 @@
 package com.example.coursereview.auth;
 
-import com.example.coursereview.model.Role;
-import com.example.coursereview.repository.TokenRepository;
-import com.example.coursereview.repository.UserRepository;
-import com.example.coursereview.service.EmailService;
-import com.example.coursereview.utils.JwtUtil;
-import com.example.coursereview.model.Token;
-import com.example.coursereview.model.TokenType;
-import lombok.RequiredArgsConstructor;
-import com.example.coursereview.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.example.coursereview.model.Role;
+import com.example.coursereview.model.Token;
+import com.example.coursereview.model.TokenType;
+import com.example.coursereview.model.User;
+import com.example.coursereview.repository.TokenRepository;
+import com.example.coursereview.repository.UserRepository;
+import com.example.coursereview.service.EmailService;
+import com.example.coursereview.utils.JwtUtil;
+
+import lombok.RequiredArgsConstructor;
 
 
 @Service
@@ -46,11 +48,11 @@ public class AuthenticationService {
         }
         var jwt = jwtUtil.generateToken(user);
         SaveUserToken(user, jwt);
-//        try {
-//            emailService.sendVerificationEmail(user.getEmail(), jwt);
-//        } catch (Exception e) {
-//            LOGGER.error("Failed to send verification email, but user was registered: " + e.getMessage());
-//        }
+       try {
+           emailService.sendVerificationEmail(user.getEmail(), jwt);
+       } catch (Exception e) {
+           LOGGER.error("Failed to send verification email, but user was registered: " + e.getMessage());
+       }
         return AuthenticationResponse.builder()
                 .token(jwt)
                 .id(user.getId())
@@ -75,14 +77,14 @@ public class AuthenticationService {
         var jwt = jwtUtil.generateToken(user);
         revokeAllUserTokens(user);
         SaveUserToken(user, jwt);
-//        if (!user.isVerified()) {
-//            try {
-//                emailService.sendVerificationEmail(user.getEmail(), jwt);
-//            } catch (Exception e) {
-//                LOGGER.error("Failed to send verification email, but user was registered: " + e.getMessage());
-//            }
-//            throw new RuntimeException("User account is not verified");
-//        }
+       if (!user.isVerified()) {
+           try {
+               emailService.sendVerificationEmail(user.getEmail(), jwt);
+           } catch (Exception e) {
+               LOGGER.error("Failed to send verification email, but user was registered: " + e.getMessage());
+           }
+           throw new RuntimeException("User account is not verified");
+       }
         return AuthenticationResponse.builder()
                 .token(jwt)
                 .id(user.getId())
