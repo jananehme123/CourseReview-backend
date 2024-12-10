@@ -1,13 +1,16 @@
 package com.example.coursereview.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
 @Table(
    name = "Reply"
 )
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Reply {
    @Id
    @GeneratedValue(
@@ -17,13 +20,15 @@ public class Reply {
    private String text;
 
    // Many-to-One relationship with Comment (parent Comment)
-   @ManyToOne
+   @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "comment_id", nullable = false) // foreign key
+   @JsonBackReference
    private Comment parentComment;
 
    // Many-to-One relationship with User
    @ManyToOne
    @JoinColumn(name = "user_id", nullable = false) // foreign key 
+   @JsonIgnoreProperties("replies")
    private User user;
 
    public Reply() {

@@ -1,5 +1,6 @@
 package com.example.coursereview.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "comments"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +31,16 @@ public class User implements UserDetails {
     private boolean verified = false;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user")
     private List<Token> tokens;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user")
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties("user")
+    private List<Reply> replies;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

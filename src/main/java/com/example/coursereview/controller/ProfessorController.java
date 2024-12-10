@@ -1,10 +1,12 @@
 package com.example.coursereview.controller;
 
+import com.example.coursereview.model.Comment;
 import com.example.coursereview.model.Course;
 import com.example.coursereview.model.Professor;
 import com.example.coursereview.model.ProfessorRating;
 import com.example.coursereview.repository.ProfessorRatingRepository;
 import com.example.coursereview.repository.ProfessorRepository;
+import com.example.coursereview.service.CommentService;
 import com.example.coursereview.service.CourseService;
 import com.example.coursereview.service.ProfessorService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,8 @@ public class ProfessorController {
     private final ProfessorRepository professorRepository;
 
     private final ProfessorRatingRepository professorRatingRepository;
+
+    private final CommentService commentService;
 
     @GetMapping
     public List<Professor> getAllProfessors() {
@@ -105,5 +109,15 @@ public class ProfessorController {
     @GetMapping("/{id}/average-rating")
     public double getAverageRating(@PathVariable int id) {
         return professorService.calculateAverageRating(id);
+    }
+
+    @GetMapping("/{id}/comments")
+    public List<Comment> getCommentsByProfessorId(@PathVariable int id) {
+        return commentService.getAllCommentsForProfessor(id);
+    }
+
+    @PostMapping("/{id}/comments")
+    public Comment addComment(@PathVariable int id, @RequestBody Comment comment) throws ResourceNotFoundException {
+        return commentService.addComment(id, comment);
     }
 }
