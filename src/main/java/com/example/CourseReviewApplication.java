@@ -25,6 +25,10 @@ public class CourseReviewApplication {
         System.setProperty("PGDATABASE", Objects.requireNonNull(dotenv.get("PGDATABASE")));
         System.setProperty("PGUSER", Objects.requireNonNull(dotenv.get("PGUSER")));
         System.setProperty("PGPASSWORD", Objects.requireNonNull(dotenv.get("PGPASSWORD")));
+        String activeProfile = System.getProperty("spring.profiles.active");
+        if (activeProfile == null || activeProfile.isBlank()) {
+            System.setProperty("spring.profiles.active", "dev");
+        }
         SpringApplication.run(CourseReviewApplication.class, args);
     }
 }
